@@ -53,3 +53,15 @@ class TextNode:
                     new_textnode = TextNode(piece, text_type)
                 output.append(new_textnode)
         return output
+
+    @staticmethod
+    def extract_markdown_images(text: str) -> list[tuple[Self]]:
+        re_pat = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+        matches = re.findall(re_pat, text)
+        return matches
+
+    @staticmethod
+    def extract_markdown_links(text: str) -> list[tuple[Self]]:
+        re_pat = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
+        matches = re.findall(re_pat, text)
+        return matches
