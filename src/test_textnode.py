@@ -113,5 +113,49 @@ class TestTextNode(unittest.TestCase):
         list_of_links_empty = TextNode.extract_markdown_links("asd")
         self.assertEqual(list_of_links_empty, list())
 
-        if __name__ == "__main__":
-            unittest.main()
+    def test_split_nodes_image(self):
+        node = TextNode("text ![img_text](img_link)", TextType.NORMAL)
+        node2 = TextNode("there is no image here", TextType.NORMAL)
+
+        new_nodes = TextNode.split_nodes_image([node])
+        new_nodes2 = TextNode.split_nodes_image([node2])
+
+        result = [
+            TextNode("text ", TextType.NORMAL),
+            TextNode("img_text", TextType.IMAGE, url="img_link"),
+        ]
+        result2 = [TextNode("there is no image here", TextType.NORMAL)]
+
+        self.assertEqual(new_nodes, result)
+        self.assertEqual(new_nodes2, result2)
+
+    def test_split_nodes_links(self):
+        node = TextNode(
+            "text [alt_text1](link1) txt_after",
+            TextType.NORMAL,
+        )
+        node2 = TextNode("[alt1](link1)[alt2](link2)[text_in_bracket]", TextType.NORMAL)
+        node3 = TextNode("text [alt1](link1)", TextType.NORMAL)
+
+        new_nodes = TextNode.split_nodes_links([node])
+        new_nodes2 = TextNode.split_nodes_links([node, node2])
+        new_nodes3 = TextNode.split_nodes_links([node3])
+
+        result = [
+            TextNode("text ", TextType.NORMAL),
+            TextNode("alt_text1", TextType.LINK, "link1"),
+            TextNode(" txt_after", TextType.NORMAL),
+        ]
+        result2 = [
+            TextNode("alt1", TextType.LINK, url="link1"),
+            TextNode("alt2", TextType.LINK, url="link2"),
+            TextNode("[text_in_bracket]", TextType.NORMAL),
+        ]
+        result3 = [
+            TextNode("text ", TextType.NORMAL),
+            TextNode("alt1", TextType.LINK, url="link1"),
+        ]
+
+        self.assertEqual(new_nodes, result)
+        self.assertEqual(new_nodes2, result + result2)
+        self.assertEqual(new_nodes3, result3)
