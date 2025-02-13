@@ -165,3 +165,25 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(new_nodes3, result3)
         self.assertEqual(new_nodes4, [node4])
         self.assertEqual(new_nodes5, [node5])
+
+    def test_text_to_textnodes(self):
+        result = TextNode.text_to_textnodes(
+            "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        )
+
+        expected_result = [
+            TextNode("This is ", TextType.NORMAL),
+            TextNode("text", TextType.BOLD),
+            TextNode(" with an ", TextType.NORMAL),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" word and a ", TextType.NORMAL),
+            TextNode("code block", TextType.CODE),
+            TextNode(" and an ", TextType.NORMAL),
+            TextNode(
+                "obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"
+            ),
+            TextNode(" and a ", TextType.NORMAL),
+            TextNode("link", TextType.LINK, "https://boot.dev"),
+        ]
+        self.assertEqual(result, expected_result)
+        self.assertIsInstance(result, list)

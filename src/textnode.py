@@ -29,6 +29,18 @@ class TextNode:
         return f"TextNode({self.text} {self.text_type} {self.url})"
 
     @staticmethod
+    def text_to_textnodes(text: str):
+        output = list()
+        output.append(TextNode(text, TextType.NORMAL))
+        output = TextNode.split_nodes_delimeter(output, "**", TextType.BOLD)
+        output = TextNode.split_nodes_delimeter(output, "*", TextType.ITALIC)
+        output = TextNode.split_nodes_delimeter(output, "`", TextType.CODE)
+
+        output = TextNode.split_nodes_image(output)
+        output = TextNode.split_nodes_links(output)
+        return output
+
+    @staticmethod
     def split_nodes_image(old_nodes: list[Self]) -> list[Self]:
         return TextNode._split_nodes_anything(
             old_nodes,
