@@ -136,10 +136,12 @@ class TestTextNode(unittest.TestCase):
         )
         node2 = TextNode("[alt1](link1)[alt2](link2)[text_in_bracket]", TextType.NORMAL)
         node3 = TextNode("text [alt1](link1)", TextType.NORMAL)
+        node4 = TextNode("text no link", TextType.ITALIC)
 
         new_nodes = TextNode.split_nodes_links([node])
         new_nodes2 = TextNode.split_nodes_links([node, node2])
         new_nodes3 = TextNode.split_nodes_links([node3])
+        new_nodes4 = TextNode.split_nodes_links([node4])
 
         result = [
             TextNode("text ", TextType.NORMAL),
