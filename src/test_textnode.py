@@ -137,11 +137,13 @@ class TestTextNode(unittest.TestCase):
         node2 = TextNode("[alt1](link1)[alt2](link2)[text_in_bracket]", TextType.NORMAL)
         node3 = TextNode("text [alt1](link1)", TextType.NORMAL)
         node4 = TextNode("text no link", TextType.ITALIC)
+        node5 = TextNode("image no link", TextType.IMAGE, url="image_URL.com")
 
         new_nodes = TextNode.split_nodes_links([node])
         new_nodes2 = TextNode.split_nodes_links([node, node2])
         new_nodes3 = TextNode.split_nodes_links([node3])
         new_nodes4 = TextNode.split_nodes_links([node4])
+        new_nodes5 = TextNode.split_nodes_links([node5])
 
         result = [
             TextNode("text ", TextType.NORMAL),
@@ -161,3 +163,5 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(new_nodes, result)
         self.assertEqual(new_nodes2, result + result2)
         self.assertEqual(new_nodes3, result3)
+        self.assertEqual(new_nodes4, [node4])
+        self.assertEqual(new_nodes5, [node5])

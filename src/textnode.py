@@ -64,7 +64,7 @@ class TextNode:
                 if len(text_in_node) <= 0:
                     break
                 if len(links) <= 0:
-                    output.append(TextNode(text_in_node, node.text_type))
+                    output.append(TextNode(text_in_node, node.text_type, node.url))
                     break
                 current_link_text, current_link_link = links.pop(0)
                 current_link = format_string.replace(
@@ -73,7 +73,7 @@ class TextNode:
                 current_text, text_in_node = text_in_node.split(current_link, 1)
 
                 if len(current_text) > 0:
-                    output.append(TextNode(current_text, node.text_type))
+                    output.append(TextNode(current_text, node.text_type, node.url))
 
                 output.append(
                     TextNode(current_link_text, text_type, url=current_link_link)
